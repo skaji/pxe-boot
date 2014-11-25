@@ -1,0 +1,16 @@
+requires 'Amon2';
+requires 'Crypt::CBC';
+requires 'Crypt::Rijndael';
+requires 'DBD::SQLite';
+requires 'HTML::FillInForm::Lite';
+requires 'HTTP::Session2';
+requires 'JSON';
+requires 'Module::Functions';
+requires 'Plack::Middleware::ReverseProxy';
+requires 'Router::Boom';
+requires 'Starlet';
+requires 'Teng';
+requires 'Test::WWW::Mechanize::PSGI';
+requires 'Text::Xslate';
+requires 'Time::Piece';
+requires 'perl', '5.20.0';

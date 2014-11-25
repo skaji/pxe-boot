@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DIR=$(cd $(dirname $0) &>/dev/null; pwd)
+export PATH=$DIR/local/bin:$PATH
+export PERL5LIB=$DIR/lib:$DIR/local/lib/perl5

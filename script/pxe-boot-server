@@ -1,0 +1,45 @@
+#!/usr/bin/env perl
+use utf8;
+use warnings;
+use 5.20.0;
+use File::Spec;
+use File::Basename 'dirname';
+my $base; BEGIN { $base = File::Spec->catdir(dirname(__FILE__), '..') }
+use lib "$base/lib";
+use Plack::Builder;
+use Pxe::Boot::Web;
+
+my $app = builder {
+    enable 'Static',
+        path => qr{^(?:/static/)},
+        root => $base;
+    enable 'Static',
+        path => qr{^(?:/robots\.txt|/favicon\.ico)$},
+        root => "$base/static";
+    enable 'ReverseProxy';
+    Pxe::Boot::Web->to_app;
+};
+
+unless (caller) {
+    require Getopt::Long;
+    require Plack::Loader;
+    my $p = Getopt::Long::Parser->new(
+        config => [qw(posix_default no_ignore_case auto_help)]
+    );
+    $p->getoptions(
+        'p|port=i'      => \(my $port = 5000),
+        'host=s'        => \(my $host = "0.0.0.0"),
+        'max-workers=i' => \(my $max_workers = 4),
+    );
+    say "Pxe::Boot: http://$host:$port";
+
+    my $loader = Plack::Loader->load('Starlet',
+        port        => $port,
+        host        => $host,
+        max_workers => $max_workers,
+    );
+    $loader->run($app);
+    exit;
+}
+
+return $app;
